@@ -3,7 +3,7 @@ services:
   postgres:
     image: postgres:10.4
     environment:
-      POSTGRES_USER: user
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: asambeni_db
     ports:
@@ -12,7 +12,7 @@ services:
   app:
     build: .
     environment:
-      DATABASE_URL: postgres://user:pass@postgres:5432/asambeni_db
+      DATABASE_URL: postgres://postgres:pass@postgres:5432/asambeni_db
       NODE_ENV: development
       PORT: 3000
     ports:
@@ -25,7 +25,7 @@ services:
   db:
     image: postgres:10.4
     environment:
-      POSTGRES_USER: user
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: asambeni_db
     volumes:
