@@ -1,24 +1,41 @@
 version: "3"
 services:
+  postgres:
+    image: postgres:10.4
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: asambeni_db
+    ports:
+      - "5432:5432"
+
   app:
     build: .
-    depends_on:
-      - postgres
     environment:
       DATABASE_URL: postgres://user:pass@postgres:5432/asambeni_db
       NODE_ENV: development
       PORT: 3000
     ports:
       - "3000:3000"
-    command: npm run dev
+    command: yarn server
     volumes:
       - .:/app/
       - /app/node_modules
-  postgres:
+
+  db:
     image: postgres:10.4
-    ports:
-      - "35432:5432"
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: asambeni_db
+    volumes:
+      - ./queries/create-tables.sql:/docker-entrypoint-initdb.d/create-tables.sql
+      - ./gitignore/postgresql:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "refilwe.dev@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "pass"
